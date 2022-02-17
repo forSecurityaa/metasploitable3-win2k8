@@ -87,8 +87,7 @@ function vagrant_init {
     echo "set boxurl and boxname." >&2
     return 1
   fi
-  # if ! vagrant box list | grep $boxname > /dev/null; then
-  if ! vagrant box list | grep $vmname > /dev/null; then
+  if ! VBoxManage list vms | grep $vmname > /dev/null; then
     vagrant_box_add
   fi
   vagrant up --provider virtualbox
@@ -166,14 +165,10 @@ EOF
 
 function main {
 
-  export vmname=OWASP_Broken_Web_Apps_VM_1.2
   local version=1.2
-  local filename="OWASP_Broken_Web_Apps_VM_${version}"
-  export boxurl=https://sourceforge.net/projects/owaspbwa/files/${version}/${filename}.ova/download
+  export vmname="OWASP_Broken_Web_Apps_VM_${version}"
+  export boxurl=https://sourceforge.net/projects/owaspbwa/files/${version}/${vmname}.ova/download
 
-  VBoxManage import --vsys 0 \
-    --vmname $vmname \
-    .cache/OWASP_Broken_Web_Apps_VM_1.2.ova
   local i
   local new_array=( $@ )
   for ((i=0;i<$#;i++)); do
