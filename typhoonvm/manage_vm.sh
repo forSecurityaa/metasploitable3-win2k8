@@ -78,7 +78,7 @@ function is_checksum {
     trap - RETURN
   " RETURN
 
-  echo "a119a0bc238040c284119269209858628cf82a72 OWASP_Broken_Web_Apps_VM_1.2.ova" >> $tmpfile
+  echo "16e8fef8230343711f1a351a2b4fb695  .cache/Typhoon-v1.02.ova" >> $tmpfile
   # linux
   if uname | grep -e Linux > /dev/null; then
     if which sha1sum > /dev/null; then
@@ -181,9 +181,9 @@ EOF
 
 function main {
 
-  local version=1.2
-  export vmname="OWASP_Broken_Web_Apps_VM_${version}"
-  export boxurl=https://sourceforge.net/projects/owaspbwa/files/${version}/${vmname}.ova/download
+  local version=1.02
+  export vmname="Typhoon-v${version}"
+  export boxurl=https://download.vulnhub.com/typhoon/${vmname}.ova
 
   local i
   local new_array=( $@ )
