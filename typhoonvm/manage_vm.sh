@@ -97,7 +97,7 @@ function is_checksum {
   fi
 }
 
-function vagrant_box_add {
+function vagrant_download {
   if [ -z $boxurl ] || [ -z $vmname ]; then
     echo "set boxurl and boxname." >&2
     return 1
@@ -105,17 +105,22 @@ function vagrant_box_add {
   if [ ! -d ./.cache ]; then
     mkdir ./.cache
   fi
+
   wget --content-disposition $boxurl -P .cache/
+}
+function vagrant_box_add {
   VBoxManage import --vsys 0 \
     --vmname $vmname \
     .cache/${vmname}.ova
-  rm .cache/*
 }
 
 function vagrant_init {
   if [ -z $vmname ]; then
     echo "set boxurl and boxname." >&2
     return 1
+  fi
+  if [ ! -f ./.cache/$vmname.ova ]; then
+    vagrant_download
   fi
   if ! VBoxManage list vms | grep $vmname > /dev/null; then
     vagrant_box_add
