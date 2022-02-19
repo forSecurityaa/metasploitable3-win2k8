@@ -102,7 +102,10 @@ function vagrant_box_add {
     echo "set boxurl and boxname." >&2
     return 1
   fi
-  mkdir .cache
+  if [ ! -d ./.cache ]; then
+    mkdir ./.cache
+  fi
+
   wget --content-disposition $boxurl -P .cache/
   VBoxManage import --vsys 0 \
     --vmname $vmname \
@@ -180,7 +183,9 @@ EOF
 }
 
 function main {
-
+  if ! command -v VBoxManage > /dev/null; then
+    echo "install virtualbox!" >&2
+  fi
   local version=1.2
   export vmname="OWASP_Broken_Web_Apps_VM_${version}"
   export boxurl=https://sourceforge.net/projects/owaspbwa/files/${version}/${vmname}.ova/download
