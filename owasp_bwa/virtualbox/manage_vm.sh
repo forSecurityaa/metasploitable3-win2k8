@@ -132,15 +132,13 @@ function vagrant_init {
 
 function vagrant_save {
 
-  local name=$1
-  # --prefixなども考える
-  if [ -z $name ]; then
-    # local format="${prefix} %Y-%m-%dT%H:%M:%S"
-    local format="%Y%m%dT%H%M%S"
-    name=$(date +"${format}")
+  local description=$1
+  if [ -z $description ]; then
+    description=snapshot
   fi
-
-  VBoxManage snapshot $vmname take $name
+  local format="%Y%m%dT%H%M%SZ"
+  local name=$(date +"${format}")
+  VBoxManage snapshot $vmname take $name --description $description
 }
 
 function vagrant_reload {
